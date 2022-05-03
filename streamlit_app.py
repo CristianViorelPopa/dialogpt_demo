@@ -73,7 +73,6 @@ class Model:
         return responses, scores
 
 
-@st.cache(allow_output_mutation=True)
 def setup_dialogpt():
     NLP_MODEL_FILE_LINKS = [
         ("https://drive.google.com/uc?id=1LNp86n3zQU3LynZrVJXu6r-v9X83rnXr", "pytorch_model.bin"),

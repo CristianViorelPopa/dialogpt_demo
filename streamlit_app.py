@@ -1,19 +1,9 @@
 import streamlit as st
 import os
+import gdown
 
 import torch
 from transformers import AutoModelWithLMHead, AutoTokenizer
-
-import requests
-import gdown
-
-
-def download_file(url, local_filename):
-    with requests.get(url, stream=True) as r:
-        r.raise_for_status()
-        with open(local_filename, 'wb') as f:
-            for chunk in r.iter_content(chunk_size=8192):
-                f.write(chunk)
 
 
 def download_model_files(model_file_links, output_dir):
@@ -94,7 +84,7 @@ with st.spinner(text='In progress'):
 
 num_candidates = st.number_input('Number of candidate corrections', min_value=1, max_value=20, value=1,
                                  format='%d', help='DialoGPT is a generative model that may produce more than one '
-                                                   'response for a given input')
+                                                   'response for a given input.')
 
 st.write('**Note**: The default values of the following parameters were the original values provided for DialoGPT generation, but you can tweak them for convenience.')
 

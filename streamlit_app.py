@@ -19,31 +19,12 @@ def download_file(url, local_filename):
 def download_model_files(model_file_links, output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
-    files_downloaded = True
-    try:
-        hostname = 'http://10.0.0.5:5555/'
-        for _, filename in model_file_links:
-            download_file(hostname + filename, os.path.join(output_dir, filename))
-            print(f'Successfully downloaded {hostname + filename} to {os.path.join(output_dir, filename)}.')
-    except Exception as e:
-        print(e)
-        print(f'Could not download {hostname + filename} to {os.path.join(output_dir, filename)}.')
-        files_downloaded = False
-
-    if files_downloaded:
-        return
-
-    files_downloaded = True
     try:
         for model_file_link, filename in model_file_links:
             gdown.download(model_file_link, os.path.join(output_dir, filename), quiet=False)
     except Exception as e:
         print(e)
         print(f'Could not download {model_file_link} to {os.path.join(output_dir, filename)}.')
-        files_downloaded = False
-
-    if files_downloaded:
-        return
 
 
 class Model:
@@ -60,17 +41,6 @@ class Model:
         except:
             print(f'Could not load DialoGPT tokenizer and/or model.')
             return
-
-    # def __init__(self, s3_bucket, model_path):
-    #     self.model_directory = 'downloaded_nlp_model'
-    #
-    #     if os.environ.get("DISABLE_NLP_MODEL") == "1":
-    #         return
-    #     if os.environ.get("DISABLE_NLP_MODEL_DOWNLOAD") != "1":
-    #         download_s3_folder(s3_bucket, model_path, local_dir=self.model_directory)
-    #
-    #     self.tokenizer = AutoTokenizer.from_pretrained(self.model_directory)
-    #     self.model = AutoModelWithLMHead.from_pretrained(self.model_directory)
 
     def answer(self, text, no_repeat_ngram_size=4, num_beams=1, top_k=50, top_p=0.8, temperature=0.8,
                num_candidate_answers=3):
@@ -127,8 +97,7 @@ num_candidates = st.number_input('Number of candidate corrections', min_value=1,
                                  format='%d', help='DialoGPT is a generative model that may produce more than one '
                                                    'response for a given input')
 
-st.write(
-    '**Note**: The default values of the following parameters were the original values provided for DialoGPT generation, but you can tweak them for convenience.')
+st.write('**Note**: The default values of the following parameters were the original values provided for DialoGPT generation, but you can tweak them for convenience.')
 
 no_repeat_ngram_size = st.number_input('Size of n-grams that won\'t repeat', min_value=0, max_value=10, value=4,
                                        format='%d',
